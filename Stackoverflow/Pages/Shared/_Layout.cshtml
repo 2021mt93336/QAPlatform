@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AKIO</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        .div-sticky-class {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        }
+    </style>
+    <script>
+        tinymce.init({
+            selector: 'textarea#editor',
+        });
+    </script>
+
+</head>
+<body>
+    <div class="div-sticky-class" >
+        <header style="background-color: #eef3f8">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">AKIO</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                &emsp;
+                <div class="input-group w-50" id="SearchDiv">
+                    <span class="input-group-text" id="basic-addon1" style=" border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-top-left-radius: 20px; border-bottom-left-radius: 20px; background-color: transparent; ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                        </svg>
+                    </span>
+                    <input id="searchBar" type="text" class="form-control" style="padding-bottom: 7px; height: 40px; border-top-right-radius: 20px; border-bottom-right-radius: 20px;" placeholder=" Search…" autocomplete="off" maxlength="600">
+
+                </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <a style="float: right; border-radius: 5px; background-color: #23629f;" class="nav-link btn-primary" asp-area="" asp-page="/AskaQuestion">Have a Question</a>&nbsp;&nbsp;
+                    @if (Utilities.Util.IsUserRegistered == 1)
+                    {
+                        <a style="float: right; border-radius: 5px; background-color: #23629f;" class="nav-link btn-primary" href="/Index?profile=1">Hi @Utilities.Util.GetUserName()</a>
+                    }
+                    else if (Utilities.Util.IsUserRegistered == 0)
+                    {
+                        <a style="float: right; border-radius: 5px; background-color: #23629f;" class="nav-link btn-primary" asp-area="" asp-page="/UserRegistration">Register</a>
+                    }
+                </div>
+            </nav>
+        </header>
+    </div>
+    <div class="container" style="width:70%;">
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script>
+        $('#searchBar').on("keypress", function (e) {
+            let keyCode = e.keyCode || e.which;
+            console.log(1)
+            if (keyCode == 13 && !e.shiftKey) {
+                var str = $('#searchBar').val();
+                console.log(str)
+                let url = window.location.origin
+                window.location.href = url + '/akio/Searchoutput?search=' + str;
+            }
+        
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

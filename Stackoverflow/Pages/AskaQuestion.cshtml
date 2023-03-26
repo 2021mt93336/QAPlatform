@@ -1,0 +1,87 @@
+﻿@page
+@model StackOverflow.Pages.HomePage.AskaQuestionModel
+@{
+}
+<h3>Ask a Public Question that is internal to Micron Technologies.</h3>
+<br />
+@if (Model.edit == 1)
+{
+    <div>
+        <form method="post">
+            <div id="AskEdit" style="background-color:white;">
+                Title<br />
+                <input class="form-control" name="title" id="title" type="text" value="@Model.questions.Title"  required />
+                <br />
+                <br />
+                Body(Description)<br />
+                <textarea id="editor" name="editor"></textarea>
+                <br />
+                Tags<br />
+                <input class="form-control" name="tags" id="tags" type="text" value="@Model.questions.Tag1,@Model.questions.Tag2,@Model.questions.Tag3,@Model.questions.Tag4,@Model.questions.Tag5" placeholder="Please add tags in comma separated values" data-role="tagsinput" />
+                <br />
+                <br />
+                We will send mail to people for registered members
+                <input class="form-control" type="checkbox" name="isChecked" id="check" checked data-toggle="toggle" data-size="xs">
+            </div>
+            <div>
+                <br />
+                <button asp-page-handler="Submit" class="btn-info" id="SubmitQuestion">Submit Question</button>
+            </div>
+        </form>
+    </div>
+
+}
+else
+{
+    <div>
+        <form method="post">
+            <div id="Ask" style="background-color:white;">
+                Title<br />
+                <input class="form-control" name="title" id="title" type="text" required />
+                <br />
+                <br />
+                Body(Description)<br />
+                <textarea id="editor" name="editor"></textarea>
+                <br />
+                Tags<br />
+                <input class="form-control" name="tags" id="tags" type="text" placeholder="Please add tags in comma separated values" data-role="tagsinput" />
+                <br />
+                <br />
+                We will send mail to people for registered members
+                <input class="form-control" type="checkbox" name="isChecked" id="check" checked data-toggle="toggle" data-size="xs">
+            </div>
+            <div>
+                <br />
+                <button asp-page-handler="Submit" class="btn-info" id="SubmitQuestion">Submit Question</button>
+            </div>
+        </form>
+    </div>
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function getData() {
+        var myContent = tinymce.get("editor").getContent();
+        var X = @Model.edit;
+        console.log(x);
+        console.log(myContent);
+    }
+    $('#SubmitQuestion').on('click', function () {
+        var Description = tinymce.get("editor").getContent();
+
+        var title = $('#title').val();
+        var Tags = $('#tags').val();
+        var communication = $('#check').val();
+        var X = @Model.edit;
+        console.log(x);
+        $.ajax({
+            url: "/?handler=Index",
+            data: { Title: title, Description: Description, Tags: Tags, communication: communication },
+            success: function (data) {
+                console.log(1)
+            },
+            error: function () {
+
+            }
+        });
+    })
+</script>

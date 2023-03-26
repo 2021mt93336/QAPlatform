@@ -1,0 +1,264 @@
+﻿@page
+@model StackOverflow.Pages.QuestionModel
+@{
+}
+<h1 class="card-title">@Model.q[0].Title</h1>
+<br />
+<h4>@Model.q[0].EmployeeName</h4>
+<div class="card" id="QuestionUserDiv" style="width: 70rem; position: sticky; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+    <div class="card-title">
+    </div>
+    <div class="card-body">
+        @Html.Raw(Model.q[0].Description)
+        &emsp;<div class="row">
+    @if (Model.q[0].Tag1 != "")
+    {
+        <p class="QuestionTag"> @Model.q[0].Tag1</p>
+    }
+    &nbsp;
+    @if (Model.q[0].Tag2 != "")
+    {
+        <p class="QuestionTag"> @Model.q[0].Tag2</p>
+    }
+    &nbsp;
+    @if (Model.q[0].Tag3 != "")
+    {
+        <p class="QuestionTag"> @Model.q[0].Tag3</p>
+    }
+    &nbsp;
+    @if (Model.q[0].Tag4 != "")
+    {
+        <p class="QuestionTag"> @Model.q[0].Tag4</p>
+    }
+    &nbsp;
+    @if (Model.q[0].Tag5 != "")
+    {
+        <p class="QuestionTag"> @Model.q[0].Tag5</p>
+    }
+
+</div>
+
+    </div>
+    <hr />
+
+    <div>
+        @for (int i = 0; i < Model.q.Count; i++)
+        {
+            <h6 style="font-size: 12px; float: right; padding-top: 5px; margin-right: 2px;"> @Model.q[i].comment <br />- &nbsp;<span style="color:aqua">@Model.q[i].EmpComment</span> &nbsp; on &nbsp; @Model.q[i].EmpCommentDateTimePosted </h6>
+            <hr style="width:90%;float:right" />
+        }
+        <form method="post">
+            <div class="row">
+                <input type="text" name="PostID" value="@Model.q[0].ID" hidden />
+                <input type="text" name="comment" placeholder="Add Comment..." class="form-control" style="border:none;" required/>
+                <button asp-page-handler="AddComment">Add comment</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+        <div style="float:left; display:flex">
+            <button class="bi bi-hand-thumbs-up-fill" value="@Model.q[0].ID" style="background-color: transparent; border: transparent; outline: none; font-size: 21px;  color:@Util.Like(Model.q[0].UserReacted)" id="Like" @Util.LikeDisabled(Model.q[0].UserReacted)>
+            </button>
+            <h5 id="vot_@Model.q[0].ID">
+                @Model.q[0].votes
+            </h5>
+            <button class="bi bi-hand-thumbs-down-fill" value="@Model.q[0].ID" style="background-color: transparent; color: @Util.Dislike(Model.q[0].UserReacted); border: transparent; outline: none; font-size: 21px;" id="DisLike" @Util.LikeDisabled(Model.q[0].UserReacted)>
+            </button>
+        </div>
+        <button style="float:right;" class="btn-primary" onclick="ScrollToAnswer()">Know the Answer?</button>
+    </div>
+</div>
+<br />
+<h2><b>Answers</b></h2>
+@for (int i = 0; i < Model.ans.Count; i++)
+{
+<div class="card" style="width: 70rem; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+
+
+    <div class="card-header " style="margin-left:0px;margin-right:0px;align-items:center">
+        @if (Model.ans[i].IsAnswer == "True")
+        {
+            <button class="form-control btn btn-success" disabled>Answered</button>
+        }
+        @if (Model.isThereAnswer == false && Model.q[0].EmployeeName.ToUpper() == Util.GetUserName().ToUpper() )
+        {
+            <form method="post">
+                <input type="text" id="AnswerIdforLike_@i" name="AnswerID" value="@Model.ans[i].AnswerID" hidden />
+                <button asp-page-handler="AnswerThis" class="form-control btn btn-outline-success">Mark this as Answer?</button>
+            </form>
+        }
+        <div style="float:left; display:flex">
+            <input type="text" id="AnswerIdforLike_@i" name="AnswerID" value="@Model.ans[i].AnswerID" hidden />
+            <button class="like bi bi-hand-thumbs-up-fill" value="@i" style="background-color: transparent; border: transparent; outline: none; font-size: 21px;  color:@Util.Like(Model.ans[i].IsUserReacted)" id="Like_@i" )>
+            </button>
+            <h5 id="vot_@i"> @Model.ans[i].votes</h5>
+            <button class="dislike bi bi-hand-thumbs-down-fill" value="@i" style="background-color: transparent; color: @Util.Dislike(Model.ans[i].IsUserReacted); border: transparent; outline: none; font-size: 21px;" id="DisLike_@i" )>
+            </button>
+        </div>
+        <div>
+            <em style="float:right">Posted by @Model.ans[i].EmployeeName on @Model.ans[i].DatePosted</em>
+        </div>
+
+
+
+    </div>
+    <div class="card-body" id="A_@i">
+        @Html.Raw(Model.ans[i].AnswerDescription)
+    </div>
+    <div>
+        <a style="float:right;font-size:12px;background-color:transparent;color:cornflowerblue;border:none;outline:none;" class="btn btn-primary" data-toggle="collapse" href="#C_@i" role="button" aria-expanded="false" aria-controls="C_@i">
+            Show Comments
+        </a>
+    </div>
+    <div id="C_@i" class="collapse">
+    <hr />
+    <span style="
+    font-weight: 600;
+    font-size: 21px;
+">Comments</span>
+        @for (int j = 0; j < Model.ans[i].comments.Count; j++)
+        {
+            <div style="padding-left: 10%; padding-right: 2px; ">
+                <div style="background-color: #e3e0e0; border-radius: 8px; padding-bottom: 4px">
+
+                    <h6 style="padding-left:11px; padding-top:8px">@Model.ans[i].comments[j].Comment</h6>
+                    <h6 style="float:right;padding-top:6px;">-by @Model.ans[i].comments[j].EmployeeName on @Model.ans[i].comments[j].DateTimePOsted</h6>
+                </div>
+            </div>
+            <br />
+        }
+    <form method="post">
+        <div class="row" style="margin-right: 0px; margin-left: 0px;">
+            <input type="text" name="PostIDfor" value="@Model.q[0].ID" hidden />
+            <input type="text" name="AnswerID" value="@Model.ans[i].AnswerID" hidden />
+            
+            <input type="text" name="comment" placeholder="Add Comment..." class="form-control" style="border:none;" required />
+            <button style="float:right" asp-page-handler="AddComment">Add comment</button>
+        </div>
+    </form>
+    </div>
+</div>
+   <br />
+}
+@ViewData["Yes"]
+<div class="userAnswer" id="UserAnswerDiv">
+    <form method="post">
+
+        <h2><b>Your Answer</b></h2>
+
+        Body(Description)<br />
+        <input type="text" name="id" value="@Model.q[0].ID" hidden />
+        <textarea id="editor" name="editor"></textarea>
+
+        <br />
+        <button class="btn-primary" onclick="ScrollToQuestion()">Want to see question?</button>&nbsp;&nbsp;
+        <button style="float:right" asp-page-handler="Submit" class="btn-success">Post Answer</button>
+    </form>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function ScrollToAnswer() {
+        const element = document.getElementById("UserAnswerDiv");
+        element.scrollIntoView();
+    }
+    function ScrollToQuestion() {
+        const element = document.getElementById("QuestionUserDiv");
+        element.scrollIntoView();
+    }
+    $(".like").click(function () {
+        this.pre
+        var fired_button = $(this).val();
+        $(this).css('color', '#59b559');
+        var dislike = document.getElementById("DisLike_" + fired_button);
+        var Vot = document.getElementById("vot_" + fired_button).innerHTML;
+        var AnswerId = document.getElementById("AnswerIdforLike_" + fired_button).value;
+        
+        dislike.style.color = 'gray';
+        $.ajax({
+            dataType: 'json',
+            contentType:'application/json',
+            url: "Question/?handler=SubmitReaction",
+            data: { reaction: '1', post: '0', answer: AnswerId,isanswer:1 },
+            success: function (data) {
+                document.getElementById("Like_" + fired_button).disabled = true;
+                document.getElementById("DisLike_" + fired_button).disabled = false;
+                document.getElementById("vot_" + fired_button).innerHTML = data;
+                console.log(data)
+            },
+            error: function () {
+
+            }
+        });
+    });
+    $(".dislike").click(function () {
+        var fired_button = $(this).val();
+        $(this).css('color', '#ff5b5b');
+        var dislike = document.getElementById("Like_" + fired_button);
+        var Vot = document.getElementById("vot_" + fired_button).innerHTML;
+       
+        var AnswerId = document.getElementById("AnswerIdforLike_" + fired_button).value;
+        dislike.style.color = 'gray';
+        $.ajax({
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "Question/?handler=SubmitReaction",
+            data: { reaction: '-1', post: '0', answer: AnswerId, isanswer: 1 },
+            success: function (data) {
+                document.getElementById("Like_" + fired_button).disabled = false;
+                document.getElementById("DisLike_" + fired_button).disabled = true;
+                document.getElementById("vot_" + fired_button).innerHTML = data;
+                console.log(data)
+
+            },
+            error: function () {
+
+            }
+        });
+    });
+    $("#Like").click(function () {
+        this.pre
+        var fired_button = $(this).val();
+        $(this).css('color', '#59b559');
+        var dislike = document.getElementById("DisLike");
+        var Vot = document.getElementById("vot_" + fired_button).innerHTML;
+        
+        dislike.style.color = 'gray';
+        $.ajax({
+            dataType: 'json',
+            contentType:'application/json',
+            url: "Question/?handler=SubmitReaction",
+            data: { reaction: '1', post: fired_button, answer: '0', isanswer: 0 },
+            success: function (data) {
+                document.getElementById("Like").disabled = true;
+                document.getElementById("DisLike").disabled = false;
+                document.getElementById("vot_" + fired_button).innerHTML = data;
+            },
+            error: function () {
+
+            }
+        });
+    });
+    $("#DisLike").click(function () {
+        var fired_button = $(this).val();
+        $(this).css('color', '#ff5b5b');
+        var dislike = document.getElementById("Like");
+        var Vot = document.getElementById("vot_" + fired_button).innerHTML;
+        
+        dislike.style.color = 'gray';
+        $.ajax({
+            dataType: 'json',
+            contentType: 'application/json',
+            url: "Question/?handler=SubmitReaction",
+            data: { reaction: '-1', post: fired_button, answer: '0', isanswer: 0 },
+            success: function (data) {
+                document.getElementById("Like").disabled = false;
+                document.getElementById("DisLike").disabled = true;
+                document.getElementById("vot_" + fired_button).innerHTML = data;
+            },
+            error: function () {
+
+            }
+        });
+    });
+</script>

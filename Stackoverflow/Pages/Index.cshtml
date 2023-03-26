@@ -1,0 +1,59 @@
+﻿@page
+@model StackOverflow.Pages.IndexModel
+
+<h3 style="padding:12px;">Top Questions</h3>
+<hr style="border-block-width:7px;color:black" />
+@for (int i = 0; i < Model.questions.Count; i++)
+{
+    <div class="card" style="width: inherit">
+        <div class="card-body">
+            <a href="~/Question?id=@Model.questions[i].ID"> @Model.questions[i].Title</a>
+            <a style="float:right;font-size:12px;background-color:transparent;color:cornflowerblue;border:none;outline:none;"class="btn btn-primary" data-toggle="collapse" href="#Q_@i" role="button" aria-expanded="false" aria-controls="Q_@i">
+                Show complete question
+            </a>
+            <div class="collapse" id="Q_@i">
+                &emsp;
+                @Html.Raw(Model.questions[i].Description)
+            </div>
+            <br />
+            <div class="row">
+                <p class="QuestionTag"> @Model.questions[i].Tag1</p>&nbsp;
+                @if (Model.questions[i].Tag2 != "")
+                {
+                    <p class="QuestionTag"> @Model.questions[i].Tag2</p>
+                }
+                &nbsp;
+                @if (Model.questions[i].Tag3 != "")
+                {
+                    <p class="QuestionTag"> @Model.questions[i].Tag3</p>
+                }
+                &nbsp;
+                @if (Model.questions[i].Tag4 != "")
+                {
+                    <p class="QuestionTag"> @Model.questions[i].Tag4</p>
+                }
+                &nbsp;
+                @if (Model.questions[i].Tag5 != "")
+                {
+                    <p class="QuestionTag"> @Model.questions[i].Tag5</p>
+                }
+
+            </div>
+            @*@Html.Raw(Model.questions[i].Description)*@
+        </div>
+        <div class="card-footer" style="padding-top:7px;font-size:12px;">
+            <button class="like bi bi-hand-thumbs-up-fill" style="background-color: transparent; border: transparent; outline: none; font-size: 21px;" disabled>
+            </button>23&nbsp;
+            <button class="dislike bi bi-hand-thumbs-down-fill" style="background-color: transparent; border: transparent; outline: none; font-size: 21px;" disabled>
+            </button>12&nbsp;
+            <p style="float:right;padding-top:4px;">by&nbsp;@Model.questions[i].EmployeeName</p>&nbsp;
+            <p style="float:right;padding-top:4px;">
+                @Model.questions[i].DateTimePosted
+            </p>&nbsp;
+        </div>
+
+    </div>
+    <hr style="border-block-width:3px" />
+
+}
+<link href="~/css/site.css" rel="stylesheet" />
