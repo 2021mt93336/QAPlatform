@@ -1,0 +1,34 @@
+{"intents": [
+  {"tag": "Hello",
+   "patterns": ["Hi", "Hello", "Yo how you doing","what can you do for me"],
+   "responses": ["Hello my dear friend", "Hey Mate!", "Yeah I am good, thanks for asking","Ask me anything! Mate"],
+   "context": [""]
+  },
+  {"tag": "Workday Access Issue",
+   "patterns": ["Workday", "Unable to access Workday", "Workday access reactivate"],
+   "responses": ["Workday is a cloud based enterprise application.", "ofcourse just like Pranav", "My age is infinity as long as someone is maintaining me"],
+   "context": [""]
+  },
+  {"tag": "User Accounts Activation",
+   "patterns": ["Service Accounts", "Test Accounts", "Generic Accounts"],
+   "responses": ["Service Accounts", "Test Accounts", "Generic Accounts"],
+   "context": [""]
+  },
+  {"tag": "Password Reset",
+   "patterns": ["what is deep learning", "why to study deep learning"],
+   "responses": ["deep learning is based on the learning of neural networks, just like the neurons captures memory in our brain.","deep learning is used to solve real world complex problems like self driving cars and even i am also built on this technology only"],
+   "context": [""]
+  },
+  {"tag": "User Account Creation",
+    "patterns": ["Service Accounts", "Test Accounts", "Generic Accounts"],
+    "responses": ["deep learning is based on the learning of neural networks, just like the neurons captures memory in our brain.","deep learning is used to solve real world complex problems like self driving cars and even i am also built on this technology only"],
+    "context": [""]
+   },
+   {"tag": "API credential Application Issue",
+    "patterns": ["what is deep learning", "why to study deep learning"],
+    "responses": ["deep learning is based on the learning of neural networks, just like the neurons captures memory in our brain.","deep learning is used to solve real world complex problems like self driving cars and even i am also built on this technology only"],
+    "context": [""]
+   }
+
+]}
+  
